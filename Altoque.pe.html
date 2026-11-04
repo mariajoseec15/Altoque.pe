@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroConnect - Red Profesional & Pecuaria</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        agro: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        earth: {
+                            100: '#fdfbf7',
+                            200: '#f7f2ea',
+                            600: '#854d0e',
+                            800: '#713f12',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #16a34a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #15803d;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col">
+
+    <!-- HEADER / NAV -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="resetFilters()">
+                    <div class="w-11 h-11 bg-agro-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-agro-200">
+                        <i class="fa-solid fa-cow text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-bold text-slate-900 tracking-tight">Agro<span class="text-agro-600">Connect</span></span>
+                        <span class="block text-xs font-medium text-slate-500">Red Profesional Pecuaria</span>
+                    </div>
+                </div>
+
+                <!-- Buscador Central -->
+                <div class="hidden md:flex items-center bg-slate-100 hover:bg-slate-200/70 transition-all rounded-full border border-slate-200 shadow-sm p-1.5 pl-5 pr-2 gap-4 w-1/2 max-w-xl">
+                    <div class="flex-1">
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Búsqueda rápida</label>
+                        <input type="text" id="searchInput" onkeyup="filterProfessionals()" placeholder="Ej: Sanidad, Reproducción, Cajamarca, Universidad..." class="bg-transparent text-sm text-slate-800 placeholder-slate-400 focus:outline-none w-full">
+                    </div>
+                    <button onclick="filterProfessionals()" class="w-10 h-10 bg-agro-600 text-white rounded-full flex items-center justify-center hover:bg-agro-700 transition-colors shadow">
+                        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Botones Registro -->
+                <div class="flex items-center gap-2">
+                    <button onclick="openRegisterModal('productor')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold px-3.5 py-2.5 rounded-xl border border-slate-200 transition-all">
+                        <i class="fa-solid fa-tractor mr-1 text-earth-600"></i>
+                        <span>Soy Productor</span>
+                    </button>
+                    <button onclick="openRegisterModal('profesional')" class="bg-agro-600 hover:bg-agro-700 text-white text-xs sm:text-sm font-semibold px-3.5 py-2.5 rounded-xl shadow-sm transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-doctor"></i>
+                        <span class="hidden sm:inline">Soy Profesional</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Search Input -->
+            <div class="md:hidden pb-4">
+                <div class="flex items-center bg-slate-100 rounded-xl border border-slate-200 px-3 py-2">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 mr-2 text-sm"></i>
+                    <input type="text" id="searchInputMobile" onkeyup="filterProfessionalsMobile()" placeholder="Buscar área, profesional o ciudad..." class="bg-transparent text-sm w-full focus:outline-none">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- CATEGORÍAS / ÁREAS DE ESPECIALIDAD REQUERIDAS -->
+        <section class="mb-8">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Áreas de Especialidad Pecuaria</h2>
+                <button onclick="resetFilters()" class="text-xs text-agro-600 hover:underline font-semibold flex items-center gap-1">
+                    <i class="fa-solid fa-rotate-left"></i> Limpiar Filtros
+                </button>
+            </div>
+            
+            <div class="flex items-center gap-3 overflow-x-auto pb-2 hide-scrollbar">
+                <!-- Todos -->
+                <button onclick="selectCategory('all', this)" class="category-btn active bg-agro-600 text-white border-agro-600 flex items-center gap-2 px-4 py-2.5 rounded-2xl border text-sm font-medium whitespace-nowrap transition-all shadow-sm">
+                    <i class="fa-solid fa-border-all"></i>
+                    <span>Todas las Áreas</span>
+                </button>
+
+                <!-- Sanidad -->
+                <button onclick="selectCategory('Sanidad', this)" class="category-btn bg-white text-slate-700 border-slate-200 hover:border-agro-500 flex items-center gap-2 px-4 py-2.5 rounded-2xl border text-sm font-medium whitespace-nowrap transition-all shadow-sm">
+                    <i class="fa-solid fa-briefcase-medical text-red-500"></i>
+                    <span>Sanidad</span>
+                </button>
+
+                <!-- Reproducción -->
+                <button onclick="selectCategory('Reproducción', this)" class="category-btn bg-white text-slate-700 border-slate-200 hover:border-agro-500 flex items-center gap-2 px-4 py-2.5 rounded-2xl border text-sm font-medium whitespace-nowrap transition-all shadow-sm">
+                    <i class="fa-solid fa-dna text-blue-500"></i>
+                    <span>Reproducción</span>
+                </button>
+
+                <!-- Alimentación -->
+                <button onclick="selectCategory('Alimentación', this)" class="category-btn bg-white text-slate-700 border-slate-200 hover:border-agro-500 flex items-center gap-2 px-4 py-2.5 rounded-2xl border text-sm font-medium whitespace-nowrap transition-all shadow-sm">
+                    <i class="fa-solid fa-bowl-food text-amber-500"></i>
+                    <span>Alimentación</span>
+                </button>
+
+                <!-- Pastos y forrajes -->
+                <button onclick="selectCategory('Pastos y forrajes', this)" class="category-btn bg-white text-slate-700 border-slate-200 hover:border-agro-500 flex items-center gap-2 px-4 py-2.5 rounded-2xl border text-sm font-medium whitespace-nowrap transition-all shadow-sm">
+                    <i class="fa-solid fa-wheat-awn text-emerald-600"></i>
+                    <span>Pastos y Forrajes</span>
+                </button>
+
+                <!-- Agronegocios -->
+                <button onclick="selectCategory('Agronegocios', this)" class="category-btn bg-white text-slate-700 border-slate-200 hover:border-agro-500 flex items-center gap-2 px-4 py-2.5 rounded-2xl border text-sm font-medium whitespace-nowrap transition-all shadow-sm">
+                    <i class="fa-solid fa-chart-line text-purple-600"></i>
+                    <span>Agronegocios</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- FILTROS SECUNDARIOS DE REGIONALIZACIÓN -->
+        <section class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-location-dot text-slate-400"></i>
+                <span class="text-xs font-bold text-slate-500 uppercase">Residencia / Región:</span>
+                <select id="locationSelect" onchange="filterProfessionals()" class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-slate-700 font-medium focus:outline-none focus:border-agro-600">
+                    <option value="all">Todas las Regiones</option>
+                    <option value="Amazonas">Amazonas, Perú</option>
+                    <option value="Cajamarca">Cajamarca, Perú</option>
+                    <option value="Antioquia">Antioquia, Colombia</option>
+                    <option value="Córdoba">Córdoba, Colombia</option>
+                    <option value="Santa Cruz">Santa Cruz, Bolivia</option>
+                    <option value="Arequipa">Arequipa, Perú</option>
+                </select>
+            </div>
+
+            <div class="text-sm text-slate-500">
+                Mostrando <span id="resultsCount" class="font-bold text-slate-800">0</span> profesionales verificados
+            </div>
+        </section>
+
+        <!-- GRID DE PERFILES (ESTILO LINKEDIN / AIRBNB) -->
+        <section id="professionalsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards generadas vía JS -->
+        </section>
+
+        <!-- Estado Vacío -->
+        <div id="emptyState" class="hidden text-center py-16">
+            <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+                <i class="fa-solid fa-user-slash text-3xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-700">No se encontraron profesionales</h3>
+            <p class="text-slate-500 text-sm mt-1">Prueba cambiando los filtros de especialidad o de ubicación.</p>
+            <button onclick="resetFilters()" class="mt-4 bg-agro-600 text-white font-medium text-sm px-4 py-2 rounded-lg hover:bg-agro-700 transition-colors">
+                Restablecer Filtros
+            </button>
+        </div>
+
+    </main>
+
+    <!-- MODAL DETALLE DE PERFIL PROFESIONAL -->
+    <div id="profileModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl transition-all my-8">
+            <div class="relative h-36 bg-gradient-to-r from-agro-800 to-agro-600">
+                <button onclick="closeProfileModal()" class="absolute top-4 right-4 bg-black/30 hover:bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-sm transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="px-6 pb-6 relative">
+                <!-- Avatar Modal -->
+                <div class="flex justify-between items-end -mt-14 mb-4">
+                    <img id="modalAvatar" src="" alt="" class="w-28 h-28 rounded-2xl border-4 border-white object-cover shadow-md bg-white">
+                    <div class="flex gap-2">
+                        <span id="modalVerifiedBadge" class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 border border-emerald-200">
+                            <i class="fa-solid fa-graduation-cap text-agro-600"></i> Título Verificado
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Info Principal -->
+                <div>
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 id="modalName" class="text-2xl font-bold text-slate-900"></h3>
+                            <p id="modalProfession" class="text-agro-700 font-semibold text-sm"></p>
+                            <p id="modalUniversity" class="text-slate-500 text-xs mt-0.5 flex items-center gap-1">
+                                <i class="fa-solid fa-building-columns text-slate-400"></i> <span id="modalUniName"></span>
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <span id="modalSpecialtyBadge" class="bg-agro-100 text-agro-800 text-xs font-bold px-3 py-1 rounded-lg inline-block mb-1"></span>
+                            <span id="modalPrice" class="block text-lg font-bold text-slate-900"></span>
+                        </div>
+                    </div>
+
+                    <!-- Datos Personales & Ficha Técnica -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100 my-4 text-xs">
+                        <div>
+                            <span class="text-slate-400 block font-medium">Nacionalidad</span>
+                            <span id="modalNationality" class="font-semibold text-slate-700"></span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block font-medium">Residencia</span>
+                            <span id="modalResidencia" class="font-semibold text-slate-700"></span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block font-medium">Edad / Sexo</span>
+                            <span id="modalEdadSexo" class="font-semibold text-slate-700"></span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block font-medium">Idiomas</span>
+                            <span id="modalIdiomas" class="font-semibold text-slate-700"></span>
+                        </div>
+                    </div>
+
+                    <!-- Calificación y Constancia -->
+                    <div class="flex items-center justify-between text-xs text-slate-500 pb-3 border-b border-slate-100">
+                        <div class="flex items-center gap-1">
+                            <i class="fa-solid fa-star text-amber-400"></i>
+                            <span id="modalRating" class="font-bold text-slate-800"></span>
+                            <span id="modalReviews"></span>
+                        </div>
+                        <div id="modalDocumentStatus" class="flex items-center gap-1 text-emerald-700 font-medium">
+                            <i class="fa-solid fa-file-circle-check"></i>
+                            <span>Constancia / Título Adjunto</span>
+                        </div>
+                    </div>
+
+                    <!-- Biografía y Descripción -->
+                    <div class="mt-4">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Perfil y Experiencia</h4>
+                        <p id="modalBio" class="text-sm text-slate-600 leading-relaxed"></p>
+                    </div>
+
+                    <!-- Botones de Contacto Directo -->
+                    <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                        <a id="whatsappBtn" href="#" target="_blank" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl text-center text-sm flex items-center justify-center gap-2 transition-colors shadow">
+                            <i class="fa-brands fa-whatsapp text-lg"></i> Contactar WhatsApp
+                        </a>
+                        <a id="emailBtn" href="#" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-semibold py-3 px-4 rounded-xl text-center text-sm flex items-center justify-center gap-2 transition-colors shadow">
+                            <i class="fa-regular fa-envelope text-lg"></i> Correo Electrónico
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PRINCIPAL DE REGISTRO (CON TABS PROFESIONAL / PRODUCTOR) -->
+    <div id="registerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl transition-all my-8">
+            
+            <!-- Encabezado & Botón Cerrar -->
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900">Crear Cuenta en AgroConnect</h3>
+                    <p class="text-xs text-slate-500">Selecciona tu perfil de usuario para registrarte</p>
+                </div>
+                <button onclick="closeRegisterModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- TABS DE NAVEGACIÓN -->
+            <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-2xl my-4">
+                <button id="tabProfBtn" onclick="switchTab('profesional')" class="py-2.5 rounded-xl text-sm font-bold transition-all text-agro-700 bg-white shadow-sm">
+                    <i class="fa-solid fa-user-doctor mr-2"></i> Profesional Pecuario
+                </button>
+                <button id="tabProdBtn" onclick="switchTab('productor')" class="py-2.5 rounded-xl text-sm font-bold transition-all text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-tractor mr-2"></i> Productor Pecuario
+                </button>
+            </div>
+
+            <!-- FORMULARIO 1: REGISTRO DE PROFESIONALES -->
+            <form id="formProfesional" onsubmit="handleRegisterProf(event)" class="space-y-4">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nombres Completos *</label>
+                        <input type="text" required id="regProfName" placeholder="Ej: Dr. Roberto Gómez" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Profesión *</label>
+                        <input type="text" required id="regProfProfession" placeholder="Ej: Médico Veterinario Zootecnista" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Universidad *</label>
+                        <input type="text" required id="regProfUniversity" placeholder="Ej: Univ. Nacional Agraria La Molina" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Área de Especialidad *</label>
+                        <select id="regProfArea" required class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600 font-medium">
+                            <option value="Sanidad">Sanidad</option>
+                            <option value="Reproducción">Reproducción</option>
+                            <option value="Alimentación">Alimentación</option>
+                            <option value="Pastos y forrajes">Pastos y forrajes</option>
+                            <option value="Agronegocios">Agronegocios</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Campo para Subir Título o Constancia -->
+                <div class="bg-agro-50/60 p-3 rounded-2xl border border-dashed border-agro-300">
+                    <label class="block text-xs font-bold text-agro-900 uppercase mb-1">Título Académico / Constancia de Estudios *</label>
+                    <input type="file" required id="regProfDocument" onchange="previewFileName(this)" accept=".pdf,.png,.jpg,.jpeg" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-agro-600 file:text-white hover:file:bg-agro-700 cursor-pointer">
+                    <p id="docPreview" class="text-[11px] text-emerald-700 font-medium mt-1 hidden"></p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nacionalidad *</label>
+                        <input type="text" required id="regProfNationality" placeholder="Ej: Peruana, Colombiana..." class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Lugar de Residencia *</label>
+                        <input type="text" required id="regProfResidence" placeholder="Ej: Cajamarca, Perú" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Idiomas *</label>
+                        <input type="text" required id="regProfLanguages" placeholder="Español, Quechua..." class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Edad *</label>
+                        <input type="number" required id="regProfAge" min="18" max="90" placeholder="32" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Sexo *</label>
+                        <select id="regProfSex" required class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Correo Electrónico *</label>
+                        <input type="email" required id="regProfEmail" placeholder="profesional@ejemplo.com" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Teléfono / WhatsApp *</label>
+                        <input type="tel" required id="regProfPhone" placeholder="+51 987654321" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-agro-600 hover:bg-agro-700 text-white font-bold py-3 rounded-xl text-sm transition-colors shadow">
+                        Registrar Perfil Profesional
+                    </button>
+                </div>
+            </form>
+
+            <!-- FORMULARIO 2: REGISTRO DE PRODUCTORES PECUARIOS -->
+            <form id="formProductor" onsubmit="handleRegisterProd(event)" class="space-y-4 hidden">
+                
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nombres Completos *</label>
+                    <input type="text" required id="regProdName" placeholder="Ej: Juan Pérez Martínez" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Idioma Principal *</label>
+                        <input type="text" required id="regProdLanguage" placeholder="Ej: Español / Quechua" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Sexo *</label>
+                        <select id="regProdSex" required class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Edad *</label>
+                        <input type="number" required id="regProdAge" min="18" max="95" placeholder="45" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Sector Principal de Producción *</label>
+                    <select id="regProdSector" required class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600 font-semibold text-slate-700">
+                        <option value="Ganado mayor">Ganado mayor (Bovinos, Equinos)</option>
+                        <option value="Ganado menor">Ganado menor (Ovino, Caprino, Porcino)</option>
+                        <option value="Aves">Aves (Avicultura, Galpones)</option>
+                        <option value="Peces">Peces (Piscicultura, Truchas, Tilapia)</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Correo Electrónico</label>
+                        <input type="email" required id="regProdEmail" placeholder="productor@ejemplo.com" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Ubicación / Fundo</label>
+                        <input type="text" required id="regProdLocation" placeholder="Ej: Fundo La Esperanza, Cajamarca" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-agro-600">
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-earth-800 hover:bg-earth-600 text-white font-bold py-3 rounded-xl text-sm transition-colors shadow">
+                        Registrarme como Productor Pecuario
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- NOTIFICACIÓN TOAST -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 transition-all transform translate-y-20 opacity-0 z-50">
+        <i class="fa-solid fa-circle-check text-agro-500 text-lg"></i>
+        <span id="toastMessage" class="text-sm font-medium">Acción realizada con éxito</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 text-xs">
+            <p class="font-medium">© 2026 AgroConnect Inc. Plataforma de Vinculación Profesional y Producción Pecuaria.</p>
+            <p class="mt-1 text-slate-400">Conectando ganaderos de ganado mayor, menor, aves y peces con expertos verificados en Sanidad, Reproducción, Alimentación y Agronegocios.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // BASE DE DATOS DE PROFESIONALES CON LOS NUEVOS CAMPOS REQUERIDOS
+        const initialProfessionals = [
+            {
+                id: 1,
+                name: "Dra. Sofía Mendoza",
+                profession: "Médico Veterinario Zootecnista",
+                university: "Univ. Nacional Agraria La Molina",
+                specialtyArea: "Sanidad",
+                nationality: "Peruana",
+                residencia: "Cajamarca, Perú",
+                languages: "Español, Inglés",
+                age: 34,
+                sex: "Femenino",
+                email: "sofia.mendoza@agroconnect.org",
+                phone: "+51987654321",
+                rating: 4.9,
+                reviewsCount: 34,
+                price: "$85 USD / Consulta",
+                avatar: "https://images.unsplash.com/photo-1594824813566-78853b7c2514?w=400&auto=format&fit=crop&q=80",
+                bio: "Especialista en sanidad preventiva de hato lechero, diagnóstico ecográfico, control de mastitis y protocolos sanitarios internacionales.",
+                documentUploaded: "Titulo_Veterinaria_SMendoza.pdf"
+            },
+            {
+                id: 2,
+                name: "Ing. Carlos Villalba",
+                profession: "Zootecnista Nutricionista",
+                university: "Univ. Nacional de Colombia",
+                specialtyArea: "Alimentación",
+                nationality: "Colombiana",
+                residencia: "Antioquia, Colombia",
+                languages: "Español",
+                age: 38,
+                sex: "Masculino",
+                email: "carlos.villalba@agroconnect.org",
+                phone: "+573001234567",
+                rating: 4.8,
+                reviewsCount: 22,
+                price: "$90 USD / Consulta",
+                avatar: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&auto=format&fit=crop&q=80",
+                bio: "Formulación de raciones para ganado de ceba y ordeño. Evaluación bromatológica de insumos locales para optimizar costos de nutrición.",
+                documentUploaded: "Constancia_Zootecnia_CVillalba.pdf"
+            },
+            {
+                id: 3,
+                name: "Dr. Mateo Fernández",
+                profession: "Especialista en Reproducción Animal",
+                university: "Universidad Mayor de San Marcos",
+                specialtyArea: "Reproducción",
+                nationality: "Peruana",
+                residencia: "Amazonas, Perú",
+                languages: "Español, Quechua",
+                age: 41,
+                sex: "Masculino",
+                email: "mateo.genetica@agroconnect.org",
+                phone: "+51912345678",
+                rating: 5.0,
+                reviewsCount: 19,
+                price: "$110 USD / Consulta",
+                avatar: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&auto=format&fit=crop&q=80",
+                bio: "Consultor en inseminación artificial, transferencia de embriones (FIV) y mejoramiento genético en trópico alto.",
+                documentUploaded: "Titulo_Doctorado_MFernandez.pdf"
+            },
+            {
+                id: 4,
+                name: "Ing. Alejandro Rios",
+                profession: "Ingeniero Agrónomo Zootecnista",
+                university: "Univ. de Córdoba",
+                specialtyArea: "Pastos y forrajes",
+                nationality: "Colombiana",
+                residencia: "Córdoba, Colombia",
+                languages: "Español, Inglés",
+                age: 45,
+                sex: "Masculino",
+                email: "rios.zootecnia@agroconnect.org",
+                phone: "+573159876543",
+                rating: 4.9,
+                reviewsCount: 41,
+                price: "$75 USD / Consulta",
+                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80",
+                bio: "Especialista en sistemas silvopastoriles, manejo rotacional Voisin, aforo de pastizales y conservación de forrajes (ensilaje y henificación).",
+                documentUploaded: "Titulo_Agronomia_ARios.pdf"
+            },
+            {
+                id: 5,
+                name: "M.Sc. Elena Rocha",
+                profession: "Consultora en Agronegocios Pecuarios",
+                university: "Univ. Autónoma Gabriel René Moreno",
+                specialtyArea: "Agronegocios",
+                nationality: "Boliviana",
+                residencia: "Santa Cruz, Bolivia",
+                languages: "Español, Portugués",
+                age: 36,
+                sex: "Femenino",
+                email: "elena.rocha@agroconnect.org",
+                phone: "+59171234567",
+                rating: 4.7,
+                reviewsCount: 18,
+                price: "$100 USD / Consulta",
+                avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80",
+                bio: "Estructuración de planes de negocio pecuarios, exportación de carne y lácteos, gestión de costos ganaderos y certificaciones de origen.",
+                documentUploaded: "Master_Agronegocios_ERocha.pdf"
+            }
+        ];
+
+        let professionals = [...initialProfessionals];
+        let currentCategory = 'all';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProfessionals(professionals);
+        });
+
+        // RENDERIZAR TARJETAS EN EL GRID
+        function renderProfessionals(data) {
+            const grid = document.getElementById('professionalsGrid');
+            const emptyState = document.getElementById('emptyState');
+            const countEl = document.getElementById('resultsCount');
+
+            grid.innerHTML = '';
+            countEl.textContent = data.length;
+
+            if (data.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            data.forEach(prof => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-3xl overflow-hidden border border-slate-200/80 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group";
+                
+                card.innerHTML = `
+                    <div>
+                        <!-- Imagen & Badge -->
+                        <div class="relative h-48 overflow-hidden bg-slate-100">
+                            <img src="${prof.avatar}" alt="${prof.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-slate-800 flex items-center gap-1 shadow-sm">
+                                <i class="fa-solid fa-star text-amber-400"></i>
+                                <span>${prof.rating}</span>
+                                <span class="text-slate-400">(${prof.reviewsCount})</span>
+                            </div>
+                            <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg">
+                                <i class="fa-solid fa-location-dot text-agro-400 mr-1"></i>${prof.residencia.split(',')[0]}
+                            </div>
+                        </div>
+
+                        <!-- Detalle Perfil -->
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="bg-agro-100 text-agro-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                                    ${prof.specialtyArea}
+                                </span>
+                                <span class="text-xs text-slate-400 flex items-center gap-1">
+                                    <i class="fa-solid fa-certificate text-emerald-600"></i> Titulado
+                                </span>
+                            </div>
+
+                            <h3 class="text-lg font-bold text-slate-900 group-hover:text-agro-600 transition-colors">${prof.name}</h3>
+                            <p class="text-xs font-semibold text-slate-600">${prof.profession}</p>
+                            <p class="text-[11px] text-slate-400 mt-0.5 flex items-center gap-1">
+                                <i class="fa-solid fa-graduation-cap"></i> ${prof.university}
+                            </p>
+                            
+                            <p class="text-xs text-slate-500 mt-3 line-clamp-2 leading-relaxed">
+                                ${prof.bio}
+                            </p>
+
+                            <!-- Mini Ficha -->
+                            <div class="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-[11px] text-slate-500">
+                                <div><span class="font-bold text-slate-700">Idioma:</span> ${prof.languages}</div>
+                                <div><span class="font-bold text-slate-700">Origen:</span> ${prof.nationality}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Card -->
+                    <div class="px-5 pb-5 pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
+                        <div>
+                            <span class="text-xs text-slate-400 block">Tarifa Aprox.</span>
+                            <span class="text-sm font-bold text-slate-900">${prof.price}</span>
+                        </div>
+                        <button onclick="openProfileModal(${prof.id})" class="bg-agro-50 hover:bg-agro-600 text-agro-700 hover:text-white border border-agro-200 hover:border-transparent font-semibold text-xs px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5">
+                            <span>Ver Perfil</span>
+                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // SELECCIÓN DE CATEGORÍA
+        function selectCategory(category, btn) {
+            currentCategory = category;
+            
+            document.querySelectorAll('.category-btn').forEach(b => {
+                b.classList.remove('bg-agro-600', 'text-white', 'border-agro-600');
+                b.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
+            });
+            btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+            btn.classList.add('bg-agro-600', 'text-white', 'border-agro-600');
+
+            filterProfessionals();
+        }
+
+        // FILTRADO DE BÚSQUEDA Y UBICACIÓN
+        function filterProfessionals() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const location = document.getElementById('locationSelect').value;
+
+            const filtered = professionals.filter(p => {
+                const matchesCategory = (currentCategory === 'all' || p.specialtyArea === currentCategory);
+                const matchesLocation = (location === 'all' || p.residencia.includes(location));
+                const matchesQuery = p.name.toLowerCase().includes(query) || 
+                                     p.profession.toLowerCase().includes(query) || 
+                                     p.university.toLowerCase().includes(query) ||
+                                     p.specialtyArea.toLowerCase().includes(query) ||
+                                     p.residencia.toLowerCase().includes(query);
+
+                return matchesCategory && matchesLocation && matchesQuery;
+            });
+
+            renderProfessionals(filtered);
+        }
+
+        function filterProfessionalsMobile() {
+            const query = document.getElementById('searchInputMobile').value.toLowerCase();
+            document.getElementById('searchInput').value = query;
+            filterProfessionals();
+        }
+
+        function resetFilters() {
+            currentCategory = 'all';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchInputMobile').value = '';
+            document.getElementById('locationSelect').value = 'all';
+            
+            const firstBtn = document.querySelectorAll('.category-btn')[0];
+            selectCategory('all', firstBtn);
+        }
+
+        // MODAL VER DETALLE DE PERFIL
+        function openProfileModal(id) {
+            const prof = professionals.find(p => p.id === id);
+            if (!prof) return;
+
+            document.getElementById('modalAvatar').src = prof.avatar;
+            document.getElementById('modalName').textContent = prof.name;
+            document.getElementById('modalProfession').textContent = prof.profession;
+            document.getElementById('modalUniName').textContent = prof.university;
+            document.getElementById('modalSpecialtyBadge').textContent = prof.specialtyArea;
+            document.getElementById('modalPrice').textContent = prof.price;
+
+            document.getElementById('modalNationality').textContent = prof.nationality;
+            document.getElementById('modalResidencia').textContent = prof.residencia;
+            document.getElementById('modalEdadSexo').textContent = `${prof.age} años (${prof.sex})`;
+            document.getElementById('modalIdiomas').textContent = prof.languages;
+
+            document.getElementById('modalRating').textContent = prof.rating;
+            document.getElementById('modalReviews').textContent = `(${prof.reviewsCount} reseñas de productores)`;
+            document.getElementById('modalBio').textContent = prof.bio;
+
+            document.getElementById('whatsappBtn').href = `https://wa.me/${prof.phone.replace(/[^0-9]/g, '')}?text=Hola%20${encodeURIComponent(prof.name)},%20vi%20tu%20perfil%20en%20AgroConnect%20y%20me%20interesan%20tus%20servicios%20de%20${encodeURIComponent(prof.specialtyArea)}.`;
+            document.getElementById('emailBtn').href = `mailto:${prof.email}?subject=Consulta%20desde%20AgroConnect`;
+
+            document.getElementById('profileModal').classList.remove('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.add('hidden');
+        }
+
+        // MODAL DE REGISTRO & TAB SWITCHING
+        function openRegisterModal(type = 'profesional') {
+            document.getElementById('registerModal').classList.remove('hidden');
+            switchTab(type);
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').classList.add('hidden');
+        }
+
+        function switchTab(type) {
+            const profBtn = document.getElementById('tabProfBtn');
+            const prodBtn = document.getElementById('tabProdBtn');
+            const formProf = document.getElementById('formProfesional');
+            const formProd = document.getElementById('formProductor');
+
+            if (type === 'profesional') {
+                profBtn.className = "py-2.5 rounded-xl text-sm font-bold transition-all text-agro-700 bg-white shadow-sm";
+                prodBtn.className = "py-2.5 rounded-xl text-sm font-bold transition-all text-slate-600 hover:text-slate-900";
+                formProf.classList.remove('hidden');
+                formProd.classList.add('hidden');
+            } else {
+                prodBtn.className = "py-2.5 rounded-xl text-sm font-bold transition-all text-earth-800 bg-white shadow-sm";
+                profBtn.className = "py-2.5 rounded-xl text-sm font-bold transition-all text-slate-600 hover:text-slate-900";
+                formProd.classList.remove('hidden');
+                formProf.classList.add('hidden');
+            }
+        }
+
+        function previewFileName(input) {
+            const preview = document.getElementById('docPreview');
+            if (input.files && input.files[0]) {
+                preview.textContent = `✓ Archivo adjuntado: ${input.files[0].name}`;
+                preview.classList.remove('hidden');
+            }
+        }
+
+        // GUARDAR REGISTRO DE PROFESIONAL
+        function handleRegisterProf(e) {
+            e.preventDefault();
+
+            const docInput = document.getElementById('regProfDocument');
+            const docName = docInput.files[0] ? docInput.files[0].name : "Titulo_Adjuntado.pdf";
+
+            const newProf = {
+                id: Date.now(),
+                name: document.getElementById('regProfName').value,
+                profession: document.getElementById('regProfProfession').value,
+                university: document.getElementById('regProfUniversity').value,
+                specialtyArea: document.getElementById('regProfArea').value,
+                nationality: document.getElementById('regProfNationality').value,
+                residencia: document.getElementById('regProfResidence').value,
+                languages: document.getElementById('regProfLanguages').value,
+                age: parseInt(document.getElementById('regProfAge').value),
+                sex: document.getElementById('regProfSex').value,
+                email: document.getElementById('regProfEmail').value,
+                phone: document.getElementById('regProfPhone').value,
+                rating: 5.0,
+                reviewsCount: 1,
+                price: "$80 USD / Consulta",
+                avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80",
+                bio: `Profesional titulado de ${document.getElementById('regProfUniversity').value}, especializado en ${document.getElementById('regProfArea').value}. Disponible para asesoría técnica y campo.`,
+                documentUploaded: docName
+            };
+
+            professionals.unshift(newProf);
+            renderProfessionals(professionals);
+            closeRegisterModal();
+            document.getElementById('formProfesional').reset();
+            document.getElementById('docPreview').classList.add('hidden');
+            showToast("¡Perfil Profesional registrado y verificado exitosamente!");
+        }
+
+        // GUARDAR REGISTRO DE PRODUCTOR
+        function handleRegisterProd(e) {
+            e.preventDefault();
+
+            const prodName = document.getElementById('regProdName').value;
+            const sector = document.getElementById('regProdSector').value;
+
+            closeRegisterModal();
+            document.getElementById('formProductor').reset();
+            showToast(`¡Bienvenido/a ${prodName}! Tu perfil de productor en ${sector} ha sido creado.`);
+        }
+
+        // NOTIFICACIÓN TOAST
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
