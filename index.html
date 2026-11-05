@@ -44,6 +44,11 @@
             background-size: cover;
             background-position: center;
         }
+
+        .star-rating i {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
     </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col">
@@ -146,8 +151,6 @@
                     <button onclick="showSection('profesionales')" class="bg-altoque-gold hover:bg-yellow-500 text-altoque-olive font-extrabold px-6 py-3.5 rounded-xl shadow-lg text-base transition-all transform hover:-translate-y-0.5">
                         <i class="fa-solid fa-magnifying-glass mr-2"></i> Buscar Profesionales Ahora
                     </button>
-                    
-                    <!-- BOTÓN DINÁMICO REGISTRARME / VER MI PERFIL -->
                     <button id="heroActionBtn" onclick="openAuthModal('register')" class="bg-white hover:bg-slate-100 text-altoque-green font-extrabold px-6 py-3.5 rounded-xl shadow-lg text-base transition-all transform hover:-translate-y-0.5">
                         <i class="fa-solid fa-id-card mr-2"></i> Registrarme en la Red
                     </button>
@@ -155,45 +158,53 @@
             </div>
         </section>
 
-        <!-- Accesos Directos a Categorías (Incluye Apicultura) -->
+        <!-- Accesos Directos a Categorías (Incluye Apicultura y Acuicultura) -->
         <section class="max-w-7xl mx-auto px-4 py-12">
             <h2 class="text-2xl font-extrabold text-altoque-green text-center mb-8">Especialidades Pecuarias Disponibles</h2>
-            <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
                 <div onclick="filterByCategory('Sanidad')" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center cursor-pointer hover:border-altoque-gold hover:shadow-md transition-all group">
-                    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-briefcase-medical text-xl"></i>
+                    <div class="w-10 h-10 bg-red-100 text-red-600 rounded-xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-briefcase-medical text-lg"></i>
                     </div>
                     <h3 class="font-bold text-slate-800 text-xs">Sanidad</h3>
                 </div>
                 <div onclick="filterByCategory('Reproducción')" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center cursor-pointer hover:border-altoque-gold hover:shadow-md transition-all group">
-                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-dna text-xl"></i>
+                    <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-dna text-lg"></i>
                     </div>
                     <h3 class="font-bold text-slate-800 text-xs">Reproducción</h3>
                 </div>
                 <div onclick="filterByCategory('Alimentación')" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center cursor-pointer hover:border-altoque-gold hover:shadow-md transition-all group">
-                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-bowl-food text-xl"></i>
+                    <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-bowl-food text-lg"></i>
                     </div>
                     <h3 class="font-bold text-slate-800 text-xs">Alimentación</h3>
                 </div>
                 <div onclick="filterByCategory('Pastos y forrajes')" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center cursor-pointer hover:border-altoque-gold hover:shadow-md transition-all group">
-                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-wheat-awn text-xl"></i>
+                    <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-wheat-awn text-lg"></i>
                     </div>
                     <h3 class="font-bold text-slate-800 text-xs">Pastos y Forrajes</h3>
                 </div>
                 <div onclick="filterByCategory('Agronegocios')" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center cursor-pointer hover:border-altoque-gold hover:shadow-md transition-all group">
-                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-chart-line text-xl"></i>
+                    <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-chart-line text-lg"></i>
                     </div>
                     <h3 class="font-bold text-slate-800 text-xs">Agronegocios</h3>
                 </div>
+                <!-- Apicultura Icono fa-brands fa-hive / fa-bugs -->
                 <div onclick="filterByCategory('Apicultura')" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center cursor-pointer hover:border-altoque-gold hover:shadow-md transition-all group">
-                    <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-bee text-xl"></i>
+                    <div class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-bugs text-lg"></i>
                     </div>
                     <h3 class="font-bold text-slate-800 text-xs">Apicultura</h3>
+                </div>
+                <!-- Acuicultura Icono fa-fish-fins -->
+                <div onclick="filterByCategory('Acuicultura')" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center cursor-pointer hover:border-altoque-gold hover:shadow-md transition-all group">
+                    <div class="w-10 h-10 bg-cyan-100 text-cyan-600 rounded-xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-fish-fins text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-xs">Acuicultura</h3>
                 </div>
             </div>
         </section>
@@ -239,7 +250,7 @@
             </div>
         </div>
 
-        <!-- BOTONES DE ESPECIALIDAD (INCLUYE APICULTURA) -->
+        <!-- BOTONES DE ESPECIALIDAD -->
         <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 hide-scrollbar">
             <button onclick="selectCategoryFilter('all', this)" class="category-btn active bg-altoque-green text-white px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap shadow-sm">
                 Todas las Áreas
@@ -260,7 +271,10 @@
                 Agronegocios
             </button>
             <button onclick="selectCategoryFilter('Apicultura', this)" class="category-btn bg-white text-slate-700 border border-slate-200 hover:border-altoque-green px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap">
-                Apicultura
+                <i class="fa-solid fa-bugs mr-1"></i> Apicultura
+            </button>
+            <button onclick="selectCategoryFilter('Acuicultura', this)" class="category-btn bg-white text-slate-700 border border-slate-200 hover:border-altoque-green px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap">
+                <i class="fa-solid fa-fish-fins mr-1"></i> Acuicultura
             </button>
         </div>
 
@@ -326,7 +340,7 @@
 
                     <div>
                         <label class="block text-xs font-bold text-slate-600 mb-1">Tus Intereses Pecuarios</label>
-                        <input type="text" id="userInterestsInput" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-altoque-green" placeholder="Ej: Ganado lechero, pasto elefante, apicultura">
+                        <input type="text" id="userInterestsInput" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-altoque-green" placeholder="Ej: Ganado lechero, truchicultura, apicultura">
                     </div>
 
                     <button onclick="saveProfileChanges()" class="w-full bg-altoque-green text-white font-bold py-2.5 rounded-xl text-xs hover:bg-altoque-greenDark transition-colors">
@@ -335,10 +349,46 @@
                 </div>
 
                 <div class="lg:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-                    <h3 class="font-extrabold text-altoque-green border-b pb-2 text-sm uppercase mb-4">Historial de Profesionales Contratados</h3>
+                    <h3 class="font-extrabold text-altoque-green border-b pb-2 text-sm uppercase mb-1">Historial de Profesionales Contratados</h3>
+                    <p class="text-[11px] text-slate-400 mb-4">Haz clic sobre un profesional contratado para dejar una reseña y evaluación de estrellas.</p>
+                    
                     <div id="hiredHistoryList" class="space-y-3"></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE RESEÑA Y EVALUACIÓN CON ESTRELLAS -->
+    <div id="reviewModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl transition-all relative">
+            <button onclick="closeReviewModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 class="text-lg font-extrabold text-slate-900 mb-1">Calificar Servicio</h3>
+            <p id="reviewProfName" class="text-xs font-bold text-altoque-green mb-4"></p>
+
+            <!-- Sistema Interactivo de 0 a 5 Estrellas -->
+            <div class="text-center bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-4">
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Puntuación (0 a 5 estrellas)</label>
+                <div class="star-rating text-3xl text-slate-300 flex justify-center gap-2" id="starContainer">
+                    <i class="fa-solid fa-star" onclick="setRating(1)"></i>
+                    <i class="fa-solid fa-star" onclick="setRating(2)"></i>
+                    <i class="fa-solid fa-star" onclick="setRating(3)"></i>
+                    <i class="fa-solid fa-star" onclick="setRating(4)"></i>
+                    <i class="fa-solid fa-star" onclick="setRating(5)"></i>
+                </div>
+                <span id="ratingValueText" class="block text-xs font-bold text-altoque-gold mt-2">0 de 5 Estrellas</span>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Escribe tu Reseña / Opinión *</label>
+                <textarea id="reviewCommentInput" rows="3" class="w-full border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-altoque-green" placeholder="¿Cómo fue la atención del profesional técnico?"></textarea>
+            </div>
+
+            <button onclick="submitReview()" class="w-full bg-altoque-gold hover:bg-yellow-500 text-altoque-olive font-extrabold py-3 rounded-xl text-xs transition-colors shadow">
+                Enviar Calificación
+            </button>
         </div>
     </div>
 
@@ -446,7 +496,7 @@
                     </button>
                 </form>
 
-                <!-- REGISTRO PROFESIONAL (INCLUYE APICULTURA) -->
+                <!-- REGISTRO PROFESIONAL -->
                 <form id="formRegProfesional" onsubmit="handleRegisterProfesional(event)" class="space-y-3 hidden">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
@@ -499,6 +549,7 @@
                                 <option value="Pastos y forrajes">Pastos y forrajes</option>
                                 <option value="Agronegocios">Agronegocios</option>
                                 <option value="Apicultura">Apicultura</option>
+                                <option value="Acuicultura">Acuicultura</option>
                             </select>
                         </div>
                         <div>
@@ -630,7 +681,7 @@
     <footer class="bg-altoque-green text-white border-t border-emerald-800 mt-12 py-8">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-2">
             <p class="font-extrabold text-sm text-altoque-gold">ALTOQUE.pe — Soluciones ganaderas a un toque de distancia</p>
-            <p class="text-slate-200">Plataforma de vinculación pecuaria para Amazonas y el Perú. Sanidad, Reproducción, Alimentación, Pastos, Agronegocios y Apicultura.</p>
+            <p class="text-slate-200">Plataforma de vinculación pecuaria para Amazonas y el Perú. Sanidad, Reproducción, Alimentación, Pastos, Agronegocios, Apicultura y Acuicultura.</p>
             <p class="text-slate-400">© 2026 ALTOQUE.pe. Todos los derechos reservados.</p>
         </div>
     </footer>
@@ -648,15 +699,15 @@
             "Utcubamba": ["Bagua Grande", "Cajaruro", "Cumba", "El Milagro", "Jamalca", "Lonya Grande", "Yamon"]
         };
 
-        // BASE DE DATOS EXTENDIDA (Al menos 3 profesionales por especialidad y cobertura por distritos)
+        // BASE DE DATOS PROFESIONALES (Mínimo 3 por especialidad incluyendo Apicultura y Acuicultura)
         let professionals = [
             // REPRODUCCIÓN
             { id: 1, name: "Dr. Mateo Fernández", profession: "Médico Veterinario Zootecnista", university: "UNTRM (Chachapoyas)", specialtyArea: "Reproducción", nationality: "Peruana", provincia: "Chachapoyas", distrito: "Chachapoyas", languages: "Español, Quechua", age: 38, sex: "Masculino", email: "m.fernandez@altoque.pe", phone: "+51941234567", rating: 5.0, reviewsCount: 24, avatar: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&auto=format&fit=crop&q=80", bio: "Especialista en IATF y sincronización de celo en hato bovino en Chachapoyas.", documentUploaded: "Titulo_MFernandez.pdf" },
-            { id: 2, name: "Dra. Sofía Mendoza", profession: "Médico Veterinario", university: "Univ. Nacional Agraria La Molina", specialtyArea: "Reproducción", nationality: "Peruana", provincia: "Chachapoyas", distrito: "Leimebamba", languages: "Español", age: 35, sex: "Femenino", email: "smendoza@altoque.pe", phone: "+51987112233", rating: 4.9, reviewsCount: 19, avatar: "https://ask.ifas.ufl.edu/image/AN391/Dh6po96yk8/I44isdpkoj/I44isdpkoj-2048.webp", bio: "Evaluación andrológica de reproductores y transferencia de embriones en Leimebamba.", documentUploaded: "Titulo_SMendoza.pdf" },
+            { id: 2, name: "Dra. Sofía Mendoza", profession: "Médico Veterinario", university: "Univ. Nacional Agraria La Molina", specialtyArea: "Reproducción", nationality: "Peruana", provincia: "Chachapoyas", distrito: "Leimebamba", languages: "Español", age: 35, sex: "Femenino", email: "smendoza@altoque.pe", phone: "+51987112233", rating: 4.9, reviewsCount: 19, avatar: "https://images.unsplash.com/photo-1594824813566-78853b7c2514?w=400&auto=format&fit=crop&q=80", bio: "Evaluación andrológica de reproductores y transferencia de embriones en Leimebamba.", documentUploaded: "Titulo_SMendoza.pdf" },
             { id: 3, name: "Dr. Julio Ramos", profession: "Zootecnista Reproductor", university: "UNTRM (Chachapoyas)", specialtyArea: "Reproducción", nationality: "Peruana", provincia: "Luya", distrito: "Lamud", languages: "Español", age: 40, sex: "Masculino", email: "jramos@altoque.pe", phone: "+51977334455", rating: 4.8, reviewsCount: 14, avatar: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&auto=format&fit=crop&q=80", bio: "Mejoramiento genético bovino y programas de reproducción por ecografía en Luya.", documentUploaded: "Titulo_JRamos.pdf" },
 
             // SANIDAD
-            { id: 4, name: "Dr. HernÁN Chávez", profession: "Médico Veterinario Esp. Sanidad", university: "Univ. Nacional de Cajamarca", specialtyArea: "Sanidad", nationality: "Peruana", provincia: "Utcubamba", distrito: "Bagua Grande", languages: "Español", age: 44, sex: "Masculino", email: "hchavez@altoque.pe", phone: "+51944556677", rating: 4.9, reviewsCount: 31, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80", bio: "Control epidémico, prevención de brucelosis, mastitis y vacunación preventiva en Utcubamba.", documentUploaded: "Titulo_HChavez.pdf" },
+            { id: 4, name: "Dr. Hernán Chávez", profession: "Médico Veterinario Esp. Sanidad", university: "Univ. Nacional de Cajamarca", specialtyArea: "Sanidad", nationality: "Peruana", provincia: "Utcubamba", distrito: "Bagua Grande", languages: "Español", age: 44, sex: "Masculino", email: "hchavez@altoque.pe", phone: "+51944556677", rating: 4.9, reviewsCount: 31, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80", bio: "Control epidémico, prevención de brucelosis, mastitis y vacunación preventiva en Utcubamba.", documentUploaded: "Titulo_HChavez.pdf" },
             { id: 5, name: "Dra. Patricia Aguilar", profession: "Médico Veterinario", university: "UNTRM (Chachapoyas)", specialtyArea: "Sanidad", nationality: "Peruana", provincia: "Utcubamba", distrito: "Cajaruro", languages: "Español", age: 31, sex: "Femenino", email: "paguilar@altoque.pe", phone: "+51922334455", rating: 5.0, reviewsCount: 12, avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80", bio: "Diagnóstico parasitológico, desparasitaciones y planes sanitarios para vacunos en Cajaruro.", documentUploaded: "Titulo_PAguilar.pdf" },
             { id: 6, name: "Dr. Víctor Torres", profession: "Veterinario Zootecnista", university: "Universidad Pedro Ruiz Gallo", specialtyArea: "Sanidad", nationality: "Peruana", provincia: "Bagua", distrito: "Bagua", languages: "Español", age: 39, sex: "Masculino", email: "vtorres@altoque.pe", phone: "+51911223344", rating: 4.7, reviewsCount: 16, avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80", bio: "Tratamiento de enfermedades infecciosas ganaderas y biocontención en la zona de Bagua.", documentUploaded: "Titulo_VTorres.pdf" },
 
@@ -675,10 +726,15 @@
             { id: 14, name: "M.Sc. Fernando Castro", profession: "Economista Agrario", university: "UNTRM (Chachapoyas)", specialtyArea: "Agronegocios", nationality: "Peruana", provincia: "Condorcanqui", distrito: "Nieva", languages: "Español, Awajún", age: 37, sex: "Masculino", email: "fcastro@altoque.pe", phone: "+51944332211", rating: 4.9, reviewsCount: 10, avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80", bio: "Planes de negocio pecuario y canales de comercialización sostenible en Condorcanqui.", documentUploaded: "Titulo_FCastro.pdf" },
             { id: 15, name: "Lic. Andrea Morales", profession: "Especialista en Mercado Ganadero", university: "UNTRM (Chachapoyas)", specialtyArea: "Agronegocios", nationality: "Peruana", provincia: "Condorcanqui", distrito: "El Cenepa", languages: "Español", age: 30, sex: "Femenino", email: "amorales@altoque.pe", phone: "+51911998877", rating: 5.0, reviewsCount: 8, avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80", bio: "Asesoría en valor agregado para carne/leche y trazabilidad ganadera.", documentUploaded: "Titulo_AMorales.pdf" },
 
-            // APICULTURA (NUEVA ESPECIALIDAD)
+            // APICULTURA
             { id: 16, name: "Ing. Gonzalo Apaza", profession: "Ingeniero Apícola y Zootecnista", university: "UNTRM (Chachapoyas)", specialtyArea: "Apicultura", nationality: "Peruana", provincia: "Chachapoyas", distrito: "Huancas", languages: "Español", age: 36, sex: "Masculino", email: "gapaza@altoque.pe", phone: "+51933221100", rating: 5.0, reviewsCount: 20, avatar: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&auto=format&fit=crop&q=80", bio: "Manejo integral de colmenas, sanidad apícola (varroosis) y producción de miel orgánica en Huancas.", documentUploaded: "Titulo_GApaza.pdf" },
             { id: 17, name: "Dra. Elena Alarcón", profession: "Médico Veterinario Apicultor", university: "Univ. Nacional de Cajamarca", specialtyArea: "Apicultura", nationality: "Peruana", provincia: "Luya", distrito: "Camporredondo", languages: "Español", age: 33, sex: "Femenino", email: "ealarcon@altoque.pe", phone: "+51922110099", rating: 4.9, reviewsCount: 17, avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80", bio: "Crianza de reinas, polinización asistida y cosecha de polen y propóleo en Camporredondo.", documentUploaded: "Titulo_EAlarcon.pdf" },
-            { id: 18, name: "Ing. Samuel Huamán", profession: "Técnico Apícola Especializado", university: "UNTRM (Chachapoyas)", specialtyArea: "Apicultura", nationality: "Peruana", provincia: "Rodríguez de Mendoza", distrito: "Chirimoto", languages: "Español", age: 40, sex: "Masculino", email: "shuaman@altoque.pe", phone: "+51911009988", rating: 4.8, reviewsCount: 13, avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80", bio: "Instalación de apiarios, división de colmenas y extracción de jalea real en Chirimoto.", documentUploaded: "Titulo_SHuaman.pdf" }
+            { id: 18, name: "Ing. Samuel Huamán", profession: "Técnico Apícola Especializado", university: "UNTRM (Chachapoyas)", specialtyArea: "Apicultura", nationality: "Peruana", provincia: "Rodríguez de Mendoza", distrito: "Chirimoto", languages: "Español", age: 40, sex: "Masculino", email: "shuaman@altoque.pe", phone: "+51911009988", rating: 4.8, reviewsCount: 13, avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80", bio: "Instalación de apiarios, división de colmenas y extracción de jalea real en Chirimoto.", documentUploaded: "Titulo_SHuaman.pdf" },
+
+            // ACUICULTURA (NUEVA ESPECIALIDAD)
+            { id: 19, name: "Ing. Raúl Benavides", profession: "Ingeniero Pesquero Acuícola", university: "Univ. Nacional del Santa", specialtyArea: "Acuicultura", nationality: "Peruana", provincia: "Chachapoyas", distrito: "Molinopampa", languages: "Español", age: 39, sex: "Masculino", email: "rbenavides@altoque.pe", phone: "+51966112244", rating: 5.0, reviewsCount: 16, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80", bio: "Diseño e instalación de piscigranjas de trucha arcoíris, calidad de agua y reproducción controlada en Molinopampa.", documentUploaded: "Titulo_RBenavides.pdf" },
+            { id: 20, name: "Ing. Diana Vizcarra", profession: "Bióloga Acuicultora", university: "Universidad Nacional Amazónica", specialtyArea: "Acuicultura", nationality: "Peruana", provincia: "Bagua", distrito: "Imaza", languages: "Español, Aguaruna", age: 32, sex: "Femenino", email: "dvizcarra@altoque.pe", phone: "+51955887766", rating: 4.9, reviewsCount: 11, avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80", bio: "Cultivo de peces amazónicos (Paco, Gamitana, Tilapia), nutrición de alevines y manejo sanitario de pozas.", documentUploaded: "Titulo_DVizcarra.pdf" },
+            { id: 21, name: "Dr. Gustavo Salazar", profession: "Especialista en Sanidad Acuícola", university: "UNTRM (Chachapoyas)", specialtyArea: "Acuicultura", nationality: "Peruana", provincia: "Utcubamba", distrito: "Cumba", languages: "Español", age: 43, sex: "Masculino", email: "gsalazar@altoque.pe", phone: "+51944778899", rating: 4.8, reviewsCount: 14, avatar: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&auto=format&fit=crop&q=80", bio: "Prevención de micosis y parasitosis en estanques piscícolas. Sistemas de recirculación acuícola (RAS) en Cumba.", documentUploaded: "Titulo_GSalazar.pdf" }
         ];
 
         // ESTADO GLOBAL DE USUARIOS Y SESIÓN
@@ -686,6 +742,8 @@
         let currentUser = JSON.parse(localStorage.getItem('altoque_current_user')) || null;
         let selectedCategory = 'all';
         let currentSelectedProfId = null;
+        let currentReviewProfId = null;
+        let currentRatingSelected = 0;
 
         // INICIALIZACIÓN
         document.addEventListener('DOMContentLoaded', () => {
@@ -694,7 +752,7 @@
             checkSessionState();
         });
 
-        // NAVEGACIÓN DE SECCIONES
+        // NAVEGACIÓN SPA
         function showSection(sectionId) {
             document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(`page-${sectionId}`);
@@ -707,7 +765,7 @@
             menu.classList.toggle('translate-x-full');
         }
 
-        // CONTROL DE FILTROS
+        // CONTROL FILTROS
         function updateDistritosFilter() {
             const provSelect = document.getElementById('provinciaSelect');
             const distSelect = document.getElementById('distritoSelect');
@@ -770,7 +828,7 @@
             selectCategoryFilter('all', document.querySelectorAll('.category-btn')[0]);
         }
 
-        // RENDERIZAR VISTA DE PROFESIONALES
+        // RENDER GRID DE TARJETAS
         function renderGrid(data) {
             const grid = document.getElementById('professionalsGrid');
             const emptyState = document.getElementById('emptyState');
@@ -820,7 +878,7 @@
             });
         }
 
-        // MODAL VER PERFIL COMPLETO
+        // MODAL VER DETALLE
         function openProfileModal(id) {
             currentSelectedProfId = id;
             const prof = professionals.find(p => p.id === id);
@@ -849,7 +907,7 @@
             document.getElementById('profileModal').classList.add('hidden');
         }
 
-        // CONTROL MODAL AUTENTICACIÓN
+        // MODAL AUTENTICACIÓN
         function openAuthModal(mode) {
             document.getElementById('authModal').classList.remove('hidden');
             switchAuthTab(mode);
@@ -912,7 +970,7 @@
             }
         }
 
-        // ACCIONES DE REGISTRO
+        // REGISTROS Y LOGIN
         function handleRegisterProductor(e) {
             e.preventDefault();
             const newUser = {
@@ -1001,7 +1059,6 @@
             showToast("Sesión cerrada");
         }
 
-        // REVISAR ESTADO DE SESIÓN Y CAMBIAR BOTONES DINÁMICAMENTE
         function checkSessionState() {
             const guestView = document.getElementById('accountGuestView');
             const userView = document.getElementById('accountUserView');
@@ -1017,7 +1074,6 @@
             const heroActionBtn = document.getElementById('heroActionBtn');
 
             if (currentUser) {
-                // Estado Logueado
                 guestView.classList.add('hidden');
                 userView.classList.remove('hidden');
                 loggedInfo.classList.remove('hidden');
@@ -1030,7 +1086,6 @@
                 menuRegister.classList.add('hidden');
                 menuLogout.classList.remove('hidden');
 
-                // CAMBIO DINÁMICO EN EL BOTÓN DE LA PORTADA HERO
                 heroActionBtn.innerHTML = `<i class="fa-solid fa-user-gear mr-2"></i> Ver mi perfil`;
                 heroActionBtn.setAttribute('onclick', "showSection('micuenta')");
 
@@ -1044,7 +1099,6 @@
                 document.getElementById('userInterestsInput').value = currentUser.interests || '';
                 renderHiredHistory();
             } else {
-                // Estado Invitado
                 guestView.classList.remove('hidden');
                 userView.classList.add('hidden');
                 loggedInfo.classList.add('hidden');
@@ -1057,7 +1111,6 @@
                 menuRegister.classList.remove('hidden');
                 menuLogout.classList.add('hidden');
 
-                // RESTAURAR BOTÓN EN PORTADA HERO
                 heroActionBtn.innerHTML = `<i class="fa-solid fa-id-card mr-2"></i> Registrarme en la Red`;
                 heroActionBtn.setAttribute('onclick', "openAuthModal('register')");
             }
@@ -1077,7 +1130,7 @@
             showToast("Información de perfil actualizada");
         }
 
-        // REGISTRAR HISTORIAL DE CONTRATACIÓN
+        // REGISTRAR Y MOSTRAR HISTORIAL INTERACTIVO EN "MI CUENTA"
         function registerHired(profId) {
             if (!currentUser || !profId) return;
             const prof = professionals.find(p => p.id === profId);
@@ -1089,7 +1142,9 @@
                     id: prof.id,
                     name: prof.name,
                     profession: prof.profession,
-                    date: new Date().toLocaleDateString()
+                    date: new Date().toLocaleDateString(),
+                    userRating: 0,
+                    userComment: ''
                 });
                 saveProfileChanges();
             }
@@ -1106,16 +1161,81 @@
 
             currentUser.hiredHistory.forEach(h => {
                 const item = document.createElement('div');
-                item.className = "flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs";
+                item.className = "flex items-center justify-between p-3.5 bg-slate-50 hover:bg-amber-50/50 rounded-2xl border border-slate-200/80 cursor-pointer transition-all group";
+                item.onclick = () => openReviewModal(h.id);
+
+                const hasRated = h.userRating > 0;
+                const badgeRating = hasRated 
+                    ? `<span class="text-xs font-bold text-amber-500 flex items-center gap-1 bg-white px-2.5 py-1 rounded-lg border border-slate-200"><i class="fa-solid fa-star"></i> ${h.userRating}/5 estrellas</span>`
+                    : `<span class="text-[11px] font-bold text-altoque-green bg-emerald-100 px-2.5 py-1 rounded-lg group-hover:bg-altoque-gold group-hover:text-altoque-olive transition-colors"><i class="fa-solid fa-pen mr-1"></i> Dejar Reseña</span>`;
+
                 item.innerHTML = `
                     <div>
-                        <span class="font-bold text-slate-800">${h.name}</span>
-                        <span class="block text-slate-400 text-[11px]">${h.profession}</span>
+                        <span class="font-extrabold text-slate-900 group-hover:text-altoque-green transition-colors">${h.name}</span>
+                        <span class="block text-slate-500 text-xs">${h.profession} — <span class="text-slate-400">Contactado el ${h.date}</span></span>
+                        ${h.userComment ? `<p class="text-[11px] text-slate-600 italic mt-1 bg-white p-1.5 rounded-lg border border-slate-100 font-medium">"${h.userComment}"</p>` : ''}
                     </div>
-                    <span class="text-[10px] bg-amber-100 text-altoque-olive px-2 py-1 rounded-md font-bold">Contactado el ${h.date}</span>
+                    <div>${badgeRating}</div>
                 `;
                 container.appendChild(item);
             });
+        }
+
+        // SISTEMA DE RESEÑA Y ESTRELLAS (0 A 5)
+        function openReviewModal(profId) {
+            currentReviewProfId = profId;
+            const item = currentUser.hiredHistory.find(h => h.id === profId);
+            if (!item) return;
+
+            document.getElementById('reviewProfName').textContent = item.name;
+            document.getElementById('reviewCommentInput').value = item.userComment || '';
+            setRating(item.userRating || 0);
+
+            document.getElementById('reviewModal').classList.remove('hidden');
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.add('hidden');
+        }
+
+        function setRating(rating) {
+            currentRatingSelected = rating;
+            const stars = document.querySelectorAll('#starContainer i');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove('text-slate-300');
+                    star.classList.add('text-amber-400');
+                } else {
+                    star.classList.remove('text-amber-400');
+                    star.classList.add('text-slate-300');
+                }
+            });
+            document.getElementById('ratingValueText').textContent = `${rating} de 5 Estrellas`;
+        }
+
+        function submitReview() {
+            if (!currentUser || !currentReviewProfId) return;
+
+            const comment = document.getElementById('reviewCommentInput').value.trim();
+            const item = currentUser.hiredHistory.find(h => h.id === currentReviewProfId);
+
+            if (item) {
+                item.userRating = currentRatingSelected;
+                item.userComment = comment;
+                
+                // Actualizar promedio en la lista global de profesionales
+                const prof = professionals.find(p => p.id === currentReviewProfId);
+                if (prof && currentRatingSelected > 0) {
+                    prof.reviewsCount += 1;
+                    prof.rating = ((prof.rating + currentRatingSelected) / 2).toFixed(1);
+                }
+
+                saveProfileChanges();
+                renderHiredHistory();
+                applyFilters();
+                closeReviewModal();
+                showToast("¡Gracias! Tu reseña y calificación han sido registradas.");
+            }
         }
 
         // NOTIFICACIONES TOAST
